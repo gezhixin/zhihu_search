@@ -3,6 +3,18 @@
 	"ignore": "test",
 	"package": [
 		{
+			"checksumSHA1": "LlvQPCCJxa/4kNQDPBM5fZrtAnU=",
+			"path": "github.com/PuerkitoBio/goquery",
+			"revision": "1a71cc719d0d5b9e4f14ae072bef08b576b0bab5",
+			"revisionTime": "2017-10-07T14:12:28Z"
+		},
+		{
+			"checksumSHA1": "2rWSos1D+xqNSGkvEMOG3pntod8=",
+			"path": "github.com/andybalholm/cascadia",
+			"revision": "349dd0209470eabd9514242c688c403c0926d266",
+			"revisionTime": "2016-12-24T14:14:13Z"
+		},
+		{
 			"checksumSHA1": "fAz62j7vR7Q1DPMQRY/jHDjmEMc=",
 			"path": "github.com/axgle/mahonia",
 			"revision": "0c44128a83abf861873f8f4ec81fe58ff1cf6ea4",
@@ -85,6 +97,10 @@
 			"path": "github.com/ugorji/go/codec",
 			"revision": "54210f4e076c57f351166f0ed60e67d3fca57a36",
 			"revisionTime": "2017-09-18T22:25:52Z"
+		},
+		{
+			"path": "golang.org/x/net/html",
+			"revision": ""
 		},
 		{
 			"path": "golang.org/x/sys/unix",
