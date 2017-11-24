@@ -2,8 +2,11 @@ package spider
 
 import (
 	"fmt"
+	// "github.com/PuerkitoBio/goquery"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -32,9 +35,10 @@ func Start() {
 			GetJson(form.Paging.Next, &form)
 			for i := 0; i < len(form.Users); i++ {
 				user := form.Users[i]
+				user.HomePageUrl = "https://www.zhihu.com/people/" + user.UrlToken
+				user.Avart = strings.Replace(user.AvartTemplate, "{size}", "b", -1)
 				getUserExtInfor(&user)
 				fmt.Println(user)
-
 				userInDB := ZUser{}
 				err = db.C("User").Find(bson.M{"zid": user.ZId}).One(&userInDB)
 				if userInDB.Uid.Valid() {
@@ -71,5 +75,22 @@ func getUserExtInfor(user *ZUser) {
 	user.Position, _ = doc.Find(".position").Attr("title")
 	user.Education, _ = doc.Find(".education").Attr("title")
 	user.EducationExtra, _ = doc.Find(".education-extra").Attr("title")
+
+	agreeCount := doc.Find(".zm-profile-header-user-agree").Find("strong").Text()
+	user.AgreeCount, _ = strconv.Atoi(agreeCount)
+
+	thxCount := doc.Find(".zm-profile-header-user-thanks").Find("strong").Text()
+	user.ThxCount, _ = strconv.Atoi(thxCount)
+
+	// doc.Find(".profile-navbar").Each(func(i int, s *goquery.Selection) {
+	// 	s1 := s.Find(".item")
+	// 	href, _ := s1.Attr("href")
+	// 	fmt.Println(i, "  ", href)
+	// 	if strings.Contains(href, "/asks") {
+	// 		countStr := s.Find(".num").Text()
+	// 		fmt.Println("提问 ： ", countStr, " href: ", href)
+	// 		user.AsksCount, _ = strconv.Atoi(countStr)
+	// 	}
+	// })
 
 }
