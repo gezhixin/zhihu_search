@@ -8,20 +8,29 @@ type (
 	ZUser struct {
 		Uid            bson.ObjectId `json:"userId" bson:"_id"`
 		IsFollowed     bool          `json:"is_followed"`
-		Avart          string        `json:"avatar_url_template"`
+		AvartTemplate  string        `json:"avatar_url_template"`
 		Type           string        `json:"user_type"`
-		AnswerCount    int           `json:"answer_count"`
 		IsFollowing    bool          `json:"is_following"`
 		UrlToken       string        `json:"url_token"`
 		ZId            string        `json:"id"`
+		Name           string        `json:"name"`
+		Headline       string        `json:"headline"`
 		Gender         int           `json:"gender"`
-		FollowerCount  int           `json:"follower_count"`
 		Location       string        `json:"loction"`
 		Business       string        `json:"business"`
 		Employment     string        `json:"employment"`
+		IsOrg          bool          `json:"is_org"`
 		Position       string        `json:"position"`
 		Education      string        `json:"education"`
 		EducationExtra string        `json:"education_extra"`
+		Avart          string        `json:"avart"`
+		HomePageUrl    string        `json:"home_page_url"`
+		FollowerCount  int           `json:"follower_count"`
+		AnswerCount    int           `json:"answer_count"`
+		AsksCount      int           `json:"asks_count"`
+		ArticleCount   int           `json:"articles_count"`
+		AgreeCount     int           `json:"agree_count"`
+		ThxCount       int           `json:"thx_count"`
 	}
 
 	ZPaging struct {
