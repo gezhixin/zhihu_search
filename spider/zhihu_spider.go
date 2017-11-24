@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	Zgz_url  string = `https://www.zhihu.com/api/v4/members/zhang-jia-wei/followers?include=data%5B*%5D.answer_count%2Carticles_count%2Cgender%2Cfollower_count%2Cis_followed%2Cis_following%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics&offset=20&limit=20`
+	Zgz_url  string = `https://www.zhihu.com/api/v4/members/zhang-jia-wei/followers?include=data[*].answer_count,articles_count,gender,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics&offset=1000&limit=20`
 	MongoUrl string = "127.0.0.1:9500"
 )
 
@@ -49,7 +49,7 @@ func Start() {
 					}
 				}
 
-				time.Sleep(time.Second * time.Duration(3))
+				time.Sleep(time.Second * time.Duration(1))
 			}
 
 			if form.Paging.IsEnd {
