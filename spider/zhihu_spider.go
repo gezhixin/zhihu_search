@@ -8,10 +8,11 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	// "zhihu_search/utils"
 )
 
 const (
-	Zgz_url  string = `https://www.zhihu.com/api/v4/members/zhang-jia-wei/followers?include=data[*].answer_count,articles_count,gender,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics&offset=1000&limit=20`
+	Zgz_url  string = `https://www.zhihu.com/api/v4/members/elyn/followers?include=data[*].answer_count,articles_count,gender,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics&offset=0&limit=100`
 	MongoUrl string = "127.0.0.1:9500"
 )
 
@@ -31,29 +32,52 @@ func Start() {
 		form.Paging.Next = Zgz_url
 		form.Paging.IsEnd = false
 
+		timeCounter1 := 0
+		timeCounter2 := 0
+		isFast := true
+
 		for {
 			GetJson(form.Paging.Next, &form)
 			for i := 0; i < len(form.Users); i++ {
+
 				user := form.Users[i]
+
+				userInDB := ZUser{}
+				err = db.C("User").Find(bson.M{"zid": user.ZId}).One(&userInDB)
+				if userInDB.Uid.Valid() {
+					continue
+				}
+
 				user.HomePageUrl = "https://www.zhihu.com/people/" + user.UrlToken
 				user.Avart = strings.Replace(user.AvartTemplate, "{size}", "b", -1)
 				getUserExtInfor(&user)
 				fmt.Println(user)
-				userInDB := ZUser{}
-				err = db.C("User").Find(bson.M{"zid": user.ZId}).One(&userInDB)
-				if userInDB.Uid.Valid() {
-					db.C("User").UpdateId(userInDB.Uid, &user)
-					fmt.Println("update")
-				} else {
-					fmt.Println("insert")
-					user.Uid = bson.NewObjectId()
-					err = db.C("User").Insert(&user)
-					if err != nil {
-						fmt.Println(err)
-					}
+
+				fmt.Println("insert")
+				user.Uid = bson.NewObjectId()
+				err = db.C("User").Insert(&user)
+				if err != nil {
+					fmt.Println(err)
 				}
 
-				time.Sleep(time.Second * time.Duration(1))
+				if isFast {
+					timeCounter1++
+					time.Sleep(time.Second * time.Duration(1))
+				} else {
+					timeCounter2++
+					time.Sleep(time.Second * time.Duration(60))
+				}
+
+				if timeCounter1 > 60*30 {
+					timeCounter1 = 0
+					isFast = false
+				}
+
+				if timeCounter2 > 3 {
+					timeCounter2 = 0
+					isFast = true
+				}
+
 			}
 
 			if form.Paging.IsEnd {
