@@ -31,6 +31,7 @@ type (
 		ArticleCount   int           `json:"articles_count"`
 		AgreeCount     int           `json:"agree_count"`
 		ThxCount       int           `json:"thx_count"`
+		ExTag          int64
 	}
 
 	ZPaging struct {

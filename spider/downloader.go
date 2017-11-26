@@ -1,7 +1,7 @@
 package spider
 
 import (
-	"encoding/json"
+	"github.com/json-iterator/go"
 	// "fmt"
 	"github.com/PuerkitoBio/goquery"
 	"io/ioutil"
@@ -30,7 +30,11 @@ func GetJson(url string, obj interface{}) (body []byte, err error) {
 		return
 	}
 
+	// str := string(body[:])
+	// fmt.Println(str)
+
 	if obj != nil {
+		var json = jsoniter.ConfigCompatibleWithStandardLibrary
 		err = json.Unmarshal(body, obj)
 	}
 	return

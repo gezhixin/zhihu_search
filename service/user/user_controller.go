@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"zhihu_search/service/core/db"
 	"zhihu_search/spider"
+	// "zhihu_search/utils"
 )
 
 func Router(r *gin.Engine) {
@@ -20,7 +21,7 @@ func search(c *gin.Context) {
 
 	fmt.Println("user index")
 
-	loction, _ := c.GetQuery("location")
+	// loction, _ := c.GetQuery("location")
 	limitStr, _ := c.GetQuery("count")
 	offsetStr, _ := c.GetQuery("offset")
 
@@ -51,7 +52,11 @@ func search(c *gin.Context) {
 	}
 
 	var userList = make([]spider.ZUser, 0, 10)
-	err = db.C("User").Find(bson.M{"location": bson.M{"$regex": loction}, "gender": 0}).Sort("-_id").Limit(limit).Skip(offset).All(&userList)
+
+	// time := utils.CurrentTime() - 60*60*24*30*2
+	// err = db.C("BUser").Find(bson.M{"location": bson.M{"$regex": "北京"}, "extag": bson.M{"$gt": time}}).Limit(limit).Skip(offset).All(&userList)
+
+	err = db.C("User").Find(bson.M{"location": bson.M{"$regex": "成都|蓉城"}, "gender": 0}).Sort("-_id").Limit(limit).Skip(offset).All(&userList)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(200, gin.H{"code": 2002, "msg": "db qurry error", "data": err})
